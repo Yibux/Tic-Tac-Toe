@@ -1,4 +1,4 @@
-package Client;
+package Server;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,15 +80,6 @@ public class Board extends JPanel implements MouseListener {
         crossTimer.reset();
     }
 
-    public void printBoard() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(board[i][j]);
-            }
-            System.out.println(" ");
-        }
-    }
-
     @Override
     public void mouseClicked(MouseEvent e) {
         Point p = e.getPoint();
@@ -108,7 +99,10 @@ public class Board extends JPanel implements MouseListener {
                 circleTimer.start();
             }
         }
-
+        if(whoWon()) {
+            JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
+            askToPlayAgain();
+        }
     }
 
     private void askToPlayAgain() {
@@ -203,5 +197,14 @@ public class Board extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public void printBoard() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(board[i][j]);
+            }
+            //System.out.println(" ");
+        }
     }
 }
