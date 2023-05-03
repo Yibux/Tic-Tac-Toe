@@ -13,7 +13,7 @@ public class Board extends JPanel implements MouseListener {
     public final char[][] board;
     public MyTimer circleTimer;
     public MyTimer crossTimer;
-    private char turn;
+    public char turn;
     private char isGameOver;
     public Board() {
         Timer timer = new Timer(1000, e -> repaint());
@@ -92,17 +92,33 @@ public class Board extends JPanel implements MouseListener {
                 turn = 'X';
                 circleTimer.stop();
                 crossTimer.start();
-            } else {
-                board[square.y][square.x] = 'X';
-                turn = 'O';
-                crossTimer.stop();
-                circleTimer.start();
             }
+//            else {
+//                board[square.y][square.x] = 'X';
+//                turn = 'O';
+//                crossTimer.stop();
+//                circleTimer.start();
+//            }
         }
         if(whoWon()) {
             JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
             askToPlayAgain();
         }
+    }
+
+    public void insertChar(int x, int y) {
+        //System.out.println("x: "+x + "y: "+y);
+        if(y<0 || y>2 || x<0 || x>2)
+            return;
+        if(board[y][x] == ' ') {
+            board[y][x] = 'X';
+            if(turn == 'X')
+                turn = 'O';
+            else
+                turn = 'X';
+        }
+
+        //System.out.println("ocb");
     }
 
     private void askToPlayAgain() {

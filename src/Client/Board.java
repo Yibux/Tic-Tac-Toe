@@ -13,13 +13,21 @@ public class Board extends JPanel implements MouseListener {
     public final char[][] board;
     public MyTimer circleTimer;
     public MyTimer crossTimer;
-    private char turn;
-    private char isGameOver;
+    public char turn;
+    public char isGameOver;
+    public int x, y;
+    public boolean anotherGame;
     public Board() {
+        anotherGame = false;
+        x=3;
+        y=3;
         Timer timer = new Timer(1000, e -> repaint());
         Timer timer2 = new Timer(1000, e -> {
             if(whoWon()) {
-                JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
+                if(isGameOver == ' ')
+                    JOptionPane.showMessageDialog(this, "Remis!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
+                else
+                    JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
                 askToPlayAgain();
             }
         });
@@ -96,17 +104,21 @@ public class Board extends JPanel implements MouseListener {
         if(square.x == 3 || square.y == 3)
             return;
         if(board[square.y][square.x] == ' ') {
-            if(turn == 'O'){
-                board[square.y][square.x] = 'O';
-                turn = 'X';
-                circleTimer.stop();
-                crossTimer.start();
-            } else {
+            if(turn == 'X'){
                 board[square.y][square.x] = 'X';
+                System.out.println("przypisanie");
+                x = square.x;
+                y = square.y;
                 turn = 'O';
                 crossTimer.stop();
                 circleTimer.start();
             }
+//            else {
+//                board[square.y][square.x] = 'X';
+//                turn = 'O';
+//                crossTimer.stop();
+//                circleTimer.start();
+//            }
         }
 
     }

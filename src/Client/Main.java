@@ -33,10 +33,15 @@ public class Main {
                         panel.board[i][j] = temp.charAt(0);
                     }
                 }
-                if(a%5000==0)
-                    panel.printBoard();
+//                if(a%5000==0)
+//                    panel.printBoard();
                 //System.out.println("mapa otrzymana");
                 out.println("Map received");
+                String temp = in.readLine();
+                panel.turn = temp.charAt(0);
+                if(a%10000==0)System.out.println(panel.turn);
+                out.println(panel.x);
+                out.println(panel.y);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

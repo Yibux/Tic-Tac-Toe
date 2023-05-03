@@ -57,7 +57,11 @@ public class Main {
                     }
                 }
                 String receive = in.readLine();
-                //System.out.println(receive);
+                out.println(panel.turn);
+                receive = in.readLine();
+                String receive2 = in.readLine();
+                panel.insertChar(Integer.parseInt(receive), Integer.parseInt(receive2));
+
             }catch (IOException e) {
                 //throw new RuntimeException(e);
             }
