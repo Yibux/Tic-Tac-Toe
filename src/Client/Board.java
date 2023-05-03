@@ -11,8 +11,6 @@ public class Board extends JPanel implements MouseListener {
     private final Image imgCross;
     private final Image imgCircle;
     public final char[][] board;
-    public MyTimer circleTimer;
-    public MyTimer crossTimer;
     public char turn;
     public char isGameOver;
     public int x, y;
@@ -37,9 +35,6 @@ public class Board extends JPanel implements MouseListener {
         imgCircle = Toolkit.getDefaultToolkit().getImage("src/circle.png");
         addMouseListener(this);
         board = new char[BOARD_WIDTH][BOARD_WIDTH];
-        circleTimer = new MyTimer();
-        crossTimer = new MyTimer();
-        circleTimer.start();
         turn = 'O';
         initializeBoard();
     }
@@ -50,8 +45,6 @@ public class Board extends JPanel implements MouseListener {
         g.fillRect(0, 0, 600, 600);
         g.setColor(Color.black);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Circle time: " + circleTimer.getText(), 650, 200);
-        g.drawString("Cross time: " + crossTimer.getText(), 650, 400);
         drawLines(g);
         drawImages(g);
     }
@@ -84,8 +77,6 @@ public class Board extends JPanel implements MouseListener {
                 board[i][j]=' ';
             }
         }
-        circleTimer.reset();
-        crossTimer.reset();
     }
 
     public void printBoard() {
@@ -110,8 +101,6 @@ public class Board extends JPanel implements MouseListener {
                 x = square.x;
                 y = square.y;
                 turn = 'O';
-                crossTimer.stop();
-                circleTimer.start();
             }
 //            else {
 //                board[square.y][square.x] = 'X';

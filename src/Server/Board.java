@@ -11,16 +11,18 @@ public class Board extends JPanel implements MouseListener {
     private final Image imgCross;
     private final Image imgCircle;
     public final char[][] board;
-    public MyTimer circleTimer;
-    public MyTimer crossTimer;
     public char turn;
     private char isGameOver;
     public Board() {
         Timer timer = new Timer(1000, e -> repaint());
         Timer timer2 = new Timer(1000, e -> {
             if(whoWon()) {
-                JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
-                askToPlayAgain();
+                if(isGameOver == ' ')
+                    JOptionPane.showMessageDialog(this, "Remis!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
+                else
+                    JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
+                //askToPlayAgain();
+                System.exit(0);
             }
         });
         timer.start();
@@ -29,9 +31,6 @@ public class Board extends JPanel implements MouseListener {
         imgCircle = Toolkit.getDefaultToolkit().getImage("src/circle.png");
         addMouseListener(this);
         board = new char[BOARD_WIDTH][BOARD_WIDTH];
-        circleTimer = new MyTimer();
-        crossTimer = new MyTimer();
-        circleTimer.start();
         turn = 'O';
         initializeBoard();
     }
@@ -42,8 +41,6 @@ public class Board extends JPanel implements MouseListener {
         g.fillRect(0, 0, 600, 600);
         g.setColor(Color.black);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Circle time: " + circleTimer.getText(), 650, 200);
-        g.drawString("Cross time: " + crossTimer.getText(), 650, 400);
         drawLines(g);
         drawImages(g);
     }
@@ -76,8 +73,6 @@ public class Board extends JPanel implements MouseListener {
                 board[i][j]=' ';
             }
         }
-        circleTimer.reset();
-        crossTimer.reset();
     }
 
     @Override
@@ -90,8 +85,6 @@ public class Board extends JPanel implements MouseListener {
             if(turn == 'O'){
                 board[square.y][square.x] = 'O';
                 turn = 'X';
-                circleTimer.stop();
-                crossTimer.start();
             }
 //            else {
 //                board[square.y][square.x] = 'X';
@@ -101,7 +94,10 @@ public class Board extends JPanel implements MouseListener {
 //            }
         }
         if(whoWon()) {
-            JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
+            if(isGameOver == ' ')
+                JOptionPane.showMessageDialog(this, "Remis!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);            askToPlayAgain();
             askToPlayAgain();
         }
     }
