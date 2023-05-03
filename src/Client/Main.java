@@ -15,6 +15,8 @@ public class Main {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true);
         } catch (IOException e) {
+            System.out.println("Nie udało się połączyć z hostem");
+            System.exit(1);
             throw new RuntimeException(e);
         }
 
@@ -24,7 +26,7 @@ public class Main {
         Board panel = new Board();
         frame.add(panel);
         frame.setVisible(true);
-        int a = 5;
+        //int a = 5;
         while(true) {
             try {
                 for (int i = 0; i < 3; i++) {
@@ -33,19 +35,16 @@ public class Main {
                         panel.board[i][j] = temp.charAt(0);
                     }
                 }
-//                if(a%5000==0)
-//                    panel.printBoard();
-                //System.out.println("mapa otrzymana");
                 out.println("Map received");
                 String temp = in.readLine();
                 panel.turn = temp.charAt(0);
-                if(a%10000==0)System.out.println(panel.turn);
+                //if(a%10000==0)System.out.println(panel.turn);
                 out.println(panel.x);
                 out.println(panel.y);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            ++a;
+            //++a;
 
 
         }
