@@ -26,7 +26,8 @@ public class Board extends JPanel implements MouseListener {
                     JOptionPane.showMessageDialog(this, "Remis!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
                 else
                     JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
-                askToPlayAgain();
+                System.exit(0);
+                //askToPlayAgain();
             }
         });
         timer.start();

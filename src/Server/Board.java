@@ -13,16 +13,21 @@ public class Board extends JPanel implements MouseListener {
     public final char[][] board;
     public char turn;
     private char isGameOver;
+    public boolean isSinglePlayer = false;
+    private final Timer timer2;
     public Board() {
         Timer timer = new Timer(1000, e -> repaint());
-        Timer timer2 = new Timer(1000, e -> {
+        timer2 = new Timer(1000, e -> {
             if(whoWon()) {
                 if(isGameOver == ' ')
                     JOptionPane.showMessageDialog(this, "Remis!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
                 else
                     JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
-                //askToPlayAgain();
-                System.exit(0);
+                if(!isSinglePlayer)
+                    System.exit(0);
+//                    askToPlayAgain();
+//                else
+
             }
         });
         timer.start();
@@ -86,18 +91,16 @@ public class Board extends JPanel implements MouseListener {
                 board[square.y][square.x] = 'O';
                 turn = 'X';
             }
-//            else {
-//                board[square.y][square.x] = 'X';
-//                turn = 'O';
-//                crossTimer.stop();
-//                circleTimer.start();
-//            }
+            else if(turn == 'X' && isSinglePlayer) {
+                board[square.y][square.x] = 'X';
+                turn = 'O';
+            }
         }
         if(whoWon()) {
             if(isGameOver == ' ')
                 JOptionPane.showMessageDialog(this, "Remis!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
             else
-                JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);            askToPlayAgain();
+                JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
             askToPlayAgain();
         }
     }
@@ -145,6 +148,7 @@ public class Board extends JPanel implements MouseListener {
     private boolean whoWon() {
         if(isBoardFull()) {
             isGameOver = ' ';
+            timer2.stop();
             return true;
         }
         for (int row = 0; row < BOARD_WIDTH; row++) {
@@ -152,6 +156,7 @@ public class Board extends JPanel implements MouseListener {
                 // Ktoś wygrał w poziomie
                 System.out.println(board[row][0] + " wygrał!");
                 isGameOver = board[row][0];
+                timer2.stop();
                 return true;
             }
         }
@@ -162,6 +167,7 @@ public class Board extends JPanel implements MouseListener {
                 // Ktoś wygrał w pionie
                 System.out.println(board[0][col] + " wygrał!");
                 isGameOver = board[0][col];
+                timer2.stop();
                 return true;
             }
         }
@@ -170,11 +176,13 @@ public class Board extends JPanel implements MouseListener {
         if (board[0][0] != ' ' && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
             // Ktoś wygrał na przekątnej \
             isGameOver = board[0][0];
+            timer2.stop();
             return true;
         }
         if (board[0][2] != ' ' && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
             // Ktoś wygrał na przekątnej /
             isGameOver = board[0][2];
+            timer2.stop();
             return true;
         }
 

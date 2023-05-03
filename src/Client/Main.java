@@ -20,7 +20,7 @@ public class Main {
 
         JFrame frame = new JFrame("Tic Tac Toe - client");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 650);
+        frame.setSize(650, 650);
         Board panel = new Board();
         frame.add(panel);
         frame.setVisible(true);
