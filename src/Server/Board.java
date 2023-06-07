@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Random;
 
 public class Board extends JPanel implements MouseListener {
 
@@ -112,16 +113,14 @@ public class Board extends JPanel implements MouseListener {
         Point p = new Point();
         p.x = -1;
         p.y = -1;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if(board[i][j] == ' ') {
-                    p.x = i;
-                    p.y = j;
-                    return p;
-                }
+        while (true) {
+            Random random = new Random();
+            p.x = random.nextInt(3);
+            p.y = random.nextInt(3);
+            if(board[p.x][p.y] == ' ') {
+                return p;
             }
         }
-        return p;
     }
 
     public void insertChar(int x, int y) {
