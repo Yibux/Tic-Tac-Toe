@@ -24,17 +24,35 @@ public class Main {
         }
         menu.setVisible(false);
         if(Menu.singlePLayer == 1) {
+
+            JFrame menu2 = new JFrame("Tic Tac Toe - menu");
+            menu2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            menu2.setSize(500, 300);
+            PlayerChoose playerChoose = new PlayerChoose();
+            menu2.add(playerChoose);
+            menu2.setVisible(true);
+            while(playerChoose.playerChoose == 0) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    //e.printStackTrace();
+                }
+            }
+            menu2.setVisible(false);
+
             JFrame frame = new JFrame("Tic Tac Toe - server");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(650, 650);
             Board panel = new Board();
             panel.isSinglePlayer = true;
+            panel.isComputerPlayer = playerChoose.playerChoose == 1;
             frame.add(panel);
             frame.setVisible(true);
+
         } else {
             ServerSocket server;
             try {
-                server = new ServerSocket(9001);
+                server = new ServerSocket(1234);
                 JOptionPane.showMessageDialog(null, "Server created.");
             }catch (IOException e) {
                 //throw new RuntimeException(e);

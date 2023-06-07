@@ -14,6 +14,7 @@ public class Board extends JPanel implements MouseListener {
     public char turn;
     private char isGameOver;
     public boolean isSinglePlayer = false;
+    public boolean isComputerPlayer = false;
     private final Timer timer2;
     public Board() {
         Timer timer = new Timer(1000, e -> repaint());
@@ -25,8 +26,6 @@ public class Board extends JPanel implements MouseListener {
                     JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
                 if(!isSinglePlayer)
                     System.exit(0);
-//                    askToPlayAgain();
-//                else
 
             }
         });
@@ -106,7 +105,6 @@ public class Board extends JPanel implements MouseListener {
     }
 
     public void insertChar(int x, int y) {
-        //System.out.println("x: "+x + "y: "+y);
         if(y<0 || y>2 || x<0 || x>2)
             return;
         if(board[y][x] == ' ') {
@@ -117,7 +115,6 @@ public class Board extends JPanel implements MouseListener {
                 turn = 'X';
         }
 
-        //System.out.println("ocb");
     }
 
     private void askToPlayAgain() {
