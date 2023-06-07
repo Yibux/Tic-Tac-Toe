@@ -93,6 +93,10 @@ public class Board extends JPanel implements MouseListener {
             else if(turn == 'X' && isSinglePlayer) {
                 board[square.y][square.x] = 'X';
                 turn = 'O';
+            } else if(turn == 'X' && isComputerPlayer) {
+                Point generateFieldPoint = findEmptyField();
+                board[generateFieldPoint.y][generateFieldPoint.x] = 'X';
+                turn = 'O';
             }
         }
         if(whoWon()) {
@@ -102,6 +106,22 @@ public class Board extends JPanel implements MouseListener {
                 JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
             askToPlayAgain();
         }
+    }
+
+    private Point findEmptyField() {
+        Point p = new Point();
+        p.x = -1;
+        p.y = -1;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if(board[i][j] == ' ') {
+                    p.x = i;
+                    p.y = j;
+                    return p;
+                }
+            }
+        }
+        return p;
     }
 
     public void insertChar(int x, int y) {
