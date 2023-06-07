@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Random;
 
 public class Board extends JPanel implements MouseListener {
 
@@ -14,6 +15,7 @@ public class Board extends JPanel implements MouseListener {
     public char turn;
     private char isGameOver;
     public boolean isSinglePlayer = false;
+    public boolean isComputerPlayer = false;
     private final Timer timer2;
     public Board() {
         Timer timer = new Timer(1000, e -> repaint());
@@ -25,8 +27,6 @@ public class Board extends JPanel implements MouseListener {
                     JOptionPane.showMessageDialog(this, isGameOver + " wygrał!", "Wygrana", JOptionPane.INFORMATION_MESSAGE);
                 if(!isSinglePlayer)
                     System.exit(0);
-//                    askToPlayAgain();
-//                else
 
             }
         });
@@ -90,8 +90,13 @@ public class Board extends JPanel implements MouseListener {
             if(turn == 'O'){
                 board[square.y][square.x] = 'O';
                 turn = 'X';
+                if(isComputerPlayer && !whoWon()) {
+                    Point generateFieldPoint = findEmptyField();
+                    board[generateFieldPoint.y][generateFieldPoint.x] = 'X';
+                    turn = 'O';
+                }
             }
-            else if(turn == 'X' && isSinglePlayer) {
+            else if(turn == 'X' && isSinglePlayer && !isComputerPlayer) {
                 board[square.y][square.x] = 'X';
                 turn = 'O';
             }
@@ -105,8 +110,22 @@ public class Board extends JPanel implements MouseListener {
         }
     }
 
+    private Point findEmptyField() {
+        Point p = new Point();
+        p.x = -1;
+        p.y = -1;
+        while (true) {
+            Random random = new Random();
+            p.x = random.nextInt(0,3);
+            p.y = random.nextInt(0,3);
+            System.out.println(p);
+            if(board[p.y][p.x] == ' ') {
+                return p;
+            }
+        }
+    }
+
     public void insertChar(int x, int y) {
-        //System.out.println("x: "+x + "y: "+y);
         if(y<0 || y>2 || x<0 || x>2)
             return;
         if(board[y][x] == ' ') {
@@ -117,13 +136,13 @@ public class Board extends JPanel implements MouseListener {
                 turn = 'X';
         }
 
-        //System.out.println("ocb");
     }
 
     private void askToPlayAgain() {
         int reply = JOptionPane.showConfirmDialog(this, "Chcesz zagrać ponownie?", "Zagraj jeszcze raz", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             initializeBoard();
+            turn = 'O';
         } else {
             System.exit(0);
         }
