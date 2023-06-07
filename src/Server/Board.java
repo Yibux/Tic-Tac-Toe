@@ -90,13 +90,14 @@ public class Board extends JPanel implements MouseListener {
             if(turn == 'O'){
                 board[square.y][square.x] = 'O';
                 turn = 'X';
+                if(isComputerPlayer && !whoWon()) {
+                    Point generateFieldPoint = findEmptyField();
+                    board[generateFieldPoint.y][generateFieldPoint.x] = 'X';
+                    turn = 'O';
+                }
             }
-            else if(turn == 'X' && isSinglePlayer) {
+            else if(turn == 'X' && isSinglePlayer && !isComputerPlayer) {
                 board[square.y][square.x] = 'X';
-                turn = 'O';
-            } else if(turn == 'X' && isComputerPlayer) {
-                Point generateFieldPoint = findEmptyField();
-                board[generateFieldPoint.y][generateFieldPoint.x] = 'X';
                 turn = 'O';
             }
         }
@@ -115,9 +116,10 @@ public class Board extends JPanel implements MouseListener {
         p.y = -1;
         while (true) {
             Random random = new Random();
-            p.x = random.nextInt(3);
-            p.y = random.nextInt(3);
-            if(board[p.x][p.y] == ' ') {
+            p.x = random.nextInt(0,3);
+            p.y = random.nextInt(0,3);
+            System.out.println(p);
+            if(board[p.y][p.x] == ' ') {
                 return p;
             }
         }
@@ -140,6 +142,7 @@ public class Board extends JPanel implements MouseListener {
         int reply = JOptionPane.showConfirmDialog(this, "Chcesz zagrać ponownie?", "Zagraj jeszcze raz", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             initializeBoard();
+            turn = 'O';
         } else {
             System.exit(0);
         }
