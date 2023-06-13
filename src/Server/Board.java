@@ -59,8 +59,8 @@ public class Board extends JPanel implements MouseListener {
     }
 
     public void drawImages(Graphics g) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            for (int j = 0; j < BOARD_WIDTH; j++) {
                 if(board[i][j] == 'X')
                     g.drawImage(imgCross, j*200+15, i*200+15, this);
                 else if(board[i][j] == 'O')
@@ -91,7 +91,8 @@ public class Board extends JPanel implements MouseListener {
                 board[square.y][square.x] = 'O';
                 turn = 'X';
                 if(isComputerPlayer && !whoWon()) {
-                    Point generateFieldPoint = findEmptyField();
+                    //Point generateFieldPoint = findEmptyField();
+                    Point generateFieldPoint = findBestMove();
                     board[generateFieldPoint.y][generateFieldPoint.x] = 'X';
                     turn = 'O';
                 }
@@ -116,14 +117,90 @@ public class Board extends JPanel implements MouseListener {
         p.y = -1;
         while (true) {
             Random random = new Random();
-            p.x = random.nextInt(0,3);
-            p.y = random.nextInt(0,3);
+            p.x = random.nextInt(0,BOARD_WIDTH);
+            p.y = random.nextInt(0,BOARD_WIDTH);
             System.out.println(p);
             if(board[p.y][p.x] == ' ') {
                 return p;
             }
         }
     }
+
+    private int minimax(char[][] board, int depth, boolean isMaximizingPlayer) {
+        if (whoWon()) {
+            if (isGameOver == 'X')
+                return 1;
+            else if (isGameOver == 'O')
+                return -1;
+            else
+                return 0;
+        }
+
+        if (isBoardFull())
+            return 0;
+
+        int bestScore;
+        if (isMaximizingPlayer) {
+            bestScore = Integer.MIN_VALUE;
+            for (int i = 0; i < BOARD_WIDTH; i++) {
+                for (int j = 0; j < BOARD_WIDTH; j++) {
+                    if (board[i][j] == ' ') {
+                        board[i][j] = 'X';
+                        int score = minimax(board, depth + 1, false);
+                        board[i][j] = ' ';
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+            }
+        } else {
+            bestScore = Integer.MAX_VALUE;
+            for (int i = 0; i < BOARD_WIDTH; i++) {
+                for (int j = 0; j < BOARD_WIDTH; j++) {
+                    if (board[i][j] == ' ') {
+                        board[i][j] = 'O';
+                        int score = minimax(board, depth + 1, true);
+                        board[i][j] = ' ';
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+            }
+        }
+        return bestScore;
+    }
+
+    private Point findBestMove() {
+        int bestScore = Integer.MIN_VALUE;
+        Point bestMove = new Point();
+        bestMove.x = -1;
+        bestMove.y = -1;
+
+        // Traverse all cells
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            for (int j = 0; j < BOARD_WIDTH; j++) {
+                // Check if cell is empty
+                if (board[i][j] == ' ') {
+                    // Make the move
+                    board[i][j] = 'X';
+
+                    // Compute the score for this move
+                    int currentScore = minimax(board, 0,false);
+
+                    // If current move has higher score, update the best move and score
+                    if (currentScore > bestScore) {
+                        bestScore = currentScore;
+                        bestMove.x = j;
+                        bestMove.y = i;
+                    }
+
+                    // Undo the move
+                    board[i][j] = ' ';
+                }
+            }
+        }
+
+        return bestMove;
+    }
+
 
     public void insertChar(int x, int y) {
         if(y<0 || y>2 || x<0 || x>2)
@@ -173,7 +250,7 @@ public class Board extends JPanel implements MouseListener {
         for (int row = 0; row < BOARD_WIDTH; row++) {
             if (board[row][0] != ' ' && board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
                 // Ktoś wygrał w poziomie
-                System.out.println(board[row][0] + " wygrał!");
+                //System.out.println(board[row][0] + " wygrał!");
                 isGameOver = board[row][0];
                 timer2.stop();
                 return true;
@@ -184,7 +261,7 @@ public class Board extends JPanel implements MouseListener {
         for (int col = 0; col < BOARD_WIDTH; col++) {
             if (board[0][col] != ' ' && board[0][col] == board[1][col] && board[1][col] == board[2][col]) {
                 // Ktoś wygrał w pionie
-                System.out.println(board[0][col] + " wygrał!");
+                //System.out.println(board[0][col] + " wygrał!");
                 isGameOver = board[0][col];
                 timer2.stop();
                 return true;
